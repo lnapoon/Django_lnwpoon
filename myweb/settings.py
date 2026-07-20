@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 import sys
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -72,9 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "myweb.wsgi.application"
 
-
-import dj_database_url
-import os
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
