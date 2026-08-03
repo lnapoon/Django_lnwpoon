@@ -11,7 +11,7 @@ def index(request):
     # students = Student.objects.all()
     # context["students"] = students
 
-    context["students"] = Student.objects.all()
+    context["students"] = Student.objects.all().order_by("st_id")
 
     context["date"] = datetime.date.today()
     return render(request, "index.html", context)
