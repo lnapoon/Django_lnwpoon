@@ -1,13 +1,18 @@
 from django.shortcuts import render, HttpResponse
+from .models import Student
 
 
 # Create your views here.
 def index(request):
     import datetime
 
-    context = {
-        "title": "My Home page",
-    }
+    context = {"title": "My Home page"}
+
+    # students = Student.objects.all()
+    # context["students"] = students
+
+    context["students"] = Student.objects.all()
+
     context["date"] = datetime.date.today()
     return render(request, "index.html", context)
 

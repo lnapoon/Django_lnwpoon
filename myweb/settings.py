@@ -14,22 +14,36 @@ import os
 import sys
 from pathlib import Path
 import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(BASE_DIR / 'myweb'))
+sys.path.insert(0, str(BASE_DIR / "myweb"))
+
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@o+#&xz_hv*lvq&hh=yh1i%p!cx8ckl9riencfk5v8*2uutja9"
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY", "django-insecure-@o+#&xz_hv*lvq&hh=yh1i%p!cx8ckl9riencfk5v8*2uutja9"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
 
-ALLOWED_HOSTS = [".vercel.app", "127.0.0.1", "localhost", "*"]
+allowed_hosts_raw = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost,.vercel.app,*")
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_raw.split(",") if host.strip()]
+
+csrf_origins_raw = os.environ.get(
+    "CSRF_TRUSTED_ORIGINS", "https://*.vercel.app,http://127.0.0.1,http://localhost"
+)
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip() for origin in csrf_origins_raw.split(",") if origin.strip()
+]
 
 
 # Application definition
@@ -82,11 +96,10 @@ DATABASES = {
     "default": dj_database_url.parse(
         os.environ.get(
             "DATABASE_URL",
-            "postgresql://neondb_owner:npg_ki6sEMfxv8Bo@ep-divine-rain-azkq5r8c-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+            "postgresql://neondb_owner:npg_ki6sEMfxv8Bo@ep-divine-rain-azkq5r8c-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
         )
     )
 }
-
 
 
 # Password validation
@@ -111,9 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = os.environ.get("LANGUAGE_CODE", "en-us")
 
-TIME_ZONE = "UTC"
+TIME_ZONE = os.environ.get("TIME_ZONE", "Asia/Bangkok")
 
 USE_I18N = True
 
@@ -124,7 +137,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "statics",]
+STATICFILES_DIRS = [
+    BASE_DIR / "statics",
+]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STORAGES = {
