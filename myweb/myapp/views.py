@@ -23,3 +23,11 @@ def about(request):
 
 def contact(request):
     return render(request, "contact.html")
+
+
+def student_detail(request, pk):
+    student = Student.objects.get(pk=pk)
+    context = {
+        "student": student,
+    }
+    return render(request, "student_detail.html", context)
