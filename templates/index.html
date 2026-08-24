@@ -18,7 +18,9 @@
     {% for student in students%}
     <tr>
       <th scope="row">{{forloop.counter}}</th>
-      <td>{{student.st_id}}</td>
+      <td>
+        <a href="{% url 'student_detail' pk=student.pk %}">{{student.st_id}}</a>
+      </td>
       <td>{{student.prefix_name}}</td>
       <td>{{student.fname}}</td>
       <td>{{student.lname}}</td>
