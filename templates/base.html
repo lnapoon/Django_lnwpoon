@@ -36,7 +36,7 @@
     <nav class="sb-topnav navbar navbar-expand navbar-dark">
       <!-- Navbar Brand-->
       <a class="navbar-brand ps-3 d-flex align-items-center" href="{% url 'home' %}">
-        <i class="fa-solid fa-bolt-lightning text-warning me-2 fs-5"></i>
+        <i class="fa-solid fa-crown text-warning me-2 fs-5"></i>
         <span class="brand-gradient">INWPOON</span>
       </a>
       <!-- Sidebar Toggle-->
@@ -108,6 +108,20 @@
                   <i class="fa-solid fa-user-plus"></i>
                 </span>
                 เพิ่มนักศึกษาใหม่
+              </a>
+
+              <div class="sb-sidenav-menu-heading">ระบบรายวิชา</div>
+              <a class="nav-link" href="{% url 'subject_list' %}">
+                <span class="sidebar-icon-box icon-info">
+                  <i class="fa-solid fa-book-bookmark"></i>
+                </span>
+                รายวิชาทั้งหมด
+              </a>
+              <a class="nav-link" href="{% url 'subject_create' %}">
+                <span class="sidebar-icon-box icon-warning">
+                  <i class="fa-solid fa-plus"></i>
+                </span>
+                เพิ่มรายวิชาใหม่
               </a>
 
               <div class="sb-sidenav-menu-heading">เมนูอื่นๆ</div>

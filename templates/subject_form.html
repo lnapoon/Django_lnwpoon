@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="py-4">
+  <!-- Page Header -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-8 col-xl-7">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <div class="d-inline-flex align-items-center justify-content-center rounded-3 me-3 {% if is_edit %}bg-warning bg-opacity-25 text-warning{% else %}bg-primary bg-opacity-25 text-primary{% endif %}" style="width: 46px; height: 46px; box-shadow: 0 4px 14px {% if is_edit %}var(--warning-glow){% else %}var(--primary-glow){% endif %};">
+            <i class="fa-solid {% if is_edit %}fa-pen-to-square{% else %}fa-book-medical{% endif %} fs-5"></i>
+          </div>
+          <div>
+            <h2 class="fw-bold m-0 text-dark">{{ title }}</h2>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">หน้าแรก</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'subject_list' %}" class="text-decoration-none text-muted">รายวิชา</a></li>
+                <li class="breadcrumb-item active fw-semibold">{% if is_edit %}แก้ไขรายวิชา{% else %}เพิ่มรายวิชาใหม่{% endif %}</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <a href="{% if is_edit %}{% url 'subject_detail' pk=subject.pk %}{% else %}{% url 'subject_list' %}{% endif %}" class="btn btn-outline-secondary rounded-pill px-3 shadow-sm">
+          <i class="fa-solid fa-arrow-left me-1"></i> ย้อนกลับ
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card Container (Centered) -->
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+      <div class="card glow-card border-0">
+        <!-- Card Header Banner -->
+        <div class="card-header border-0 py-3 px-4 d-flex align-items-center justify-content-between {% if is_edit %}card-header-warning{% else %}card-header-primary{% endif %}">
+          <div class="d-flex align-items-center">
+            <i class="fa-solid {% if is_edit %}fa-pen-ruler{% else %}fa-book{% endif %} me-2 fs-5"></i>
+            <span class="fw-bold fs-5">
+              {% if is_edit %}แก้ไขข้อมูลรายวิชา{% else %}แบบฟอร์มลงทะเบียนรายวิชา{% endif %}
+            </span>
+          </div>
+          <span class="badge bg-white text-dark rounded-pill px-3 py-2 fw-semibold shadow-sm small">
+            Subject Form
+          </span>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body p-4 p-md-5">
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger rounded-3 shadow-sm border-0 mb-4 d-flex align-items-center" role="alert">
+                <i class="fa-solid fa-triangle-exclamation fa-lg me-3 text-danger"></i>
+                <div>
+                  {% for error in form.non_field_errors %}
+                    <div class="fw-semibold">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+            <!-- Subject Code -->
+            <div class="mb-4">
+              <label for="{{ form.code.id_for_label }}" class="form-label fw-bold text-secondary mb-2">
+                {{ form.code.label }} <span class="text-danger">*</span>
+              </label>
+              <div class="input-group cyber-input-group">
+                <span class="input-group-text">
+                  <i class="fa-solid fa-barcode"></i>
+                </span>
+                {{ form.code }}
+              </div>
+              {% if form.code.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.code.errors %}
+                    <div><i class="fa-solid fa-circle-exclamation me-1"></i>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Subject Title -->
+            <div class="mb-4">
+              <label for="{{ form.title.id_for_label }}" class="form-label fw-bold text-secondary mb-2">
+                {{ form.title.label }} <span class="text-danger">*</span>
+              </label>
+              <div class="input-group cyber-input-group">
+                <span class="input-group-text">
+                  <i class="fa-solid fa-book-open"></i>
+                </span>
+                {{ form.title }}
+              </div>
+              {% if form.title.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.title.errors %}
+                    <div><i class="fa-solid fa-circle-exclamation me-1"></i>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Subject Category -->
+            <div class="mb-4">
+              <label for="{{ form.category.id_for_label }}" class="form-label fw-bold text-secondary mb-2">
+                {{ form.category.label }} <span class="text-danger">*</span>
+              </label>
+              <div class="input-group cyber-input-group">
+                <span class="input-group-text">
+                  <i class="fa-solid fa-layer-group"></i>
+                </span>
+                {{ form.category }}
+              </div>
+              {% if form.category.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.category.errors %}
+                    <div><i class="fa-solid fa-circle-exclamation me-1"></i>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between align-items-center pt-4 border-top mt-4">
+              <a href="{% if is_edit %}{% url 'subject_detail' pk=subject.pk %}{% else %}{% url 'subject_list' %}{% endif %}" class="btn btn-light btn-lg px-4 rounded-3 border text-secondary">
+                <i class="fa-solid fa-xmark me-2"></i> ยกเลิก
+              </a>
+              <button type="submit" class="btn {% if is_edit %}btn-glow-warning{% else %}btn-glow-success{% endif %} btn-lg px-5 rounded-3">
+                <i class="fa-solid {% if is_edit %}fa-floppy-disk{% else %}fa-check{% endif %} me-2"></i>
+                {% if is_edit %}บันทึกการแก้ไข{% else %}บันทึกรายวิชา{% endif %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

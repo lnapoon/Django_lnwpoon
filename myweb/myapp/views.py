@@ -1,7 +1,7 @@
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from .models import Student
-from .forms import StudentForm
+from .models import Student, Subject, Category
+from .forms import StudentForm, SubjectForm
 
 
 # Create your views here.
@@ -22,6 +22,9 @@ def contact(request):
     return render(request, "contact.html")
 
 
+# ==========================================
+# Student CRUD Views
+# ==========================================
 def student_detail(request, pk):
     student = get_object_or_404(Student, pk=pk)
     context = {
@@ -78,3 +81,83 @@ def student_delete(request, pk):
         "student": student,
     }
     return render(request, "student_confirm_delete.html", context)
+
+
+# ==========================================
+# Subject CRUD Views
+# ==========================================
+def subject_list(request):
+    category_id = request.GET.get("category")
+    if category_id:
+        subjects = Subject.objects.filter(category_id=category_id).select_related("category")
+    else:
+        subjects = Subject.objects.all().select_related("category")
+
+    categories = Category.objects.all()
+
+    context = {
+        "title": "รายวิชาเรียนทั้งหมด",
+        "subjects": subjects,
+        "categories": categories,
+        "selected_category": int(category_id) if category_id and category_id.isdigit() else None,
+        "date": datetime.date.today(),
+    }
+    return render(request, "subject_list.html", context)
+
+
+def subject_detail(request, pk):
+    subject = get_object_or_404(Subject, pk=pk)
+    context = {
+        "title": f"ข้อมูลรายวิชา: {subject.code} {subject.title}",
+        "subject": subject,
+    }
+    return render(request, "subject_detail.html", context)
+
+
+def subject_create(request):
+    if request.method == "POST":
+        form = SubjectForm(request.POST)
+        if form.is_valid():
+            subject = form.save()
+            return redirect("subject_detail", pk=subject.pk)
+    else:
+        form = SubjectForm()
+
+    context = {
+        "title": "เพิ่มข้อมูลรายวิชา",
+        "form": form,
+        "is_edit": False,
+    }
+    return render(request, "subject_form.html", context)
+
+
+def subject_edit(request, pk):
+    subject = get_object_or_404(Subject, pk=pk)
+    if request.method == "POST":
+        form = SubjectForm(request.POST, instance=subject)
+        if form.is_valid():
+            subject = form.save()
+            return redirect("subject_detail", pk=subject.pk)
+    else:
+        form = SubjectForm(instance=subject)
+
+    context = {
+        "title": f"แก้ไขข้อมูลรายวิชา: {subject.code} {subject.title}",
+        "form": form,
+        "subject": subject,
+        "is_edit": True,
+    }
+    return render(request, "subject_form.html", context)
+
+
+def subject_delete(request, pk):
+    subject = get_object_or_404(Subject, pk=pk)
+    if request.method == "POST":
+        subject.delete()
+        return redirect("subject_list")
+
+    context = {
+        "title": f"ยืนยันการลบรายวิชา: {subject.code} {subject.title}",
+        "subject": subject,
+    }
+    return render(request, "subject_confirm_delete.html", context)

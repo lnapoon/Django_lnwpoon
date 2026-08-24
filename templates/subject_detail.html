@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="py-4">
+  <!-- Page Header -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-8 col-xl-7">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <div class="d-inline-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-25 text-primary me-3" style="width: 44px; height: 44px; box-shadow: 0 4px 14px var(--primary-glow);">
+            <i class="fa-solid fa-book-bookmark fs-5"></i>
+          </div>
+          <div>
+            <h2 class="fw-bold m-0 text-dark">ข้อมูลรายวิชา</h2>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">หน้าแรก</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'subject_list' %}" class="text-decoration-none text-muted">รายวิชา</a></li>
+                <li class="breadcrumb-item active fw-semibold text-primary">รายละเอียด</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <a href="{% url 'subject_list' %}" class="btn btn-outline-secondary rounded-pill px-3 shadow-sm">
+          <i class="fa-solid fa-arrow-left me-1"></i> ย้อนกลับ
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Card (Centered, Clean & Simple) -->
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+      <div class="card glow-card border-0">
+        <!-- Clean Header -->
+        <div class="card-header card-header-primary py-3 px-4 border-0 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-bookmark me-2 fs-5"></i>
+            <h5 class="m-0 fw-bold">ข้อมูลรายวิชา</h5>
+          </div>
+          <span class="badge bg-white text-primary rounded-pill px-3 py-2 fs-6 fw-bold shadow-sm font-monospace">
+            {{ subject.code }}
+          </span>
+        </div>
+
+        <!-- Clean Body -->
+        <div class="card-body p-4 p-md-5">
+          <!-- Information Rows -->
+          <div class="p-3 bg-light rounded-4 mb-3 border d-flex align-items-center">
+            <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
+              <i class="fa-solid fa-barcode"></i>
+            </div>
+            <div>
+              <div class="text-muted small fw-bold">รหัสวิชา</div>
+              <div class="fs-5 fw-bold text-primary font-monospace">{{ subject.code }}</div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-4 mb-3 border d-flex align-items-center">
+            <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
+              <i class="fa-solid fa-book-open"></i>
+            </div>
+            <div>
+              <div class="text-muted small fw-bold">ชื่อรายวิชา</div>
+              <div class="fs-5 fw-bold text-dark">{{ subject.title }}</div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-4 mb-2 border d-flex align-items-center">
+            <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+              <div class="text-muted small fw-bold">หมวดหมู่วิชา</div>
+              <div class="mt-1">
+                {% if "เฉพาะสาขา" in subject.category.name %}
+                  <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fs-6 fw-semibold">
+                    <i class="fa-solid fa-laptop-code me-1"></i> {{ subject.category.name }}
+                  </span>
+                {% elif "เลือก" in subject.category.name %}
+                  <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fs-6 fw-semibold">
+                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> {{ subject.category.name }}
+                  </span>
+                {% elif "ทั่วไป" in subject.category.name %}
+                  <span class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill fs-6 fw-semibold">
+                    <i class="fa-solid fa-globe me-1"></i> {{ subject.category.name }}
+                  </span>
+                {% else %}
+                  <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill fs-6 fw-semibold">
+                    <i class="fa-solid fa-briefcase me-1"></i> {{ subject.category.name }}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="card-footer bg-light p-3 px-4 d-flex justify-content-end align-items-center border-top">
+          <div class="d-flex gap-2">
+            <a href="{% url 'subject_edit' pk=subject.pk %}" class="btn btn-glow-warning rounded-pill px-4">
+              <i class="fa-solid fa-pen-to-square me-1"></i> แก้ไข
+            </a>
+            <a href="{% url 'subject_delete' pk=subject.pk %}" class="btn btn-glow-danger rounded-pill px-4">
+              <i class="fa-solid fa-trash-can me-1"></i> ลบ
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
