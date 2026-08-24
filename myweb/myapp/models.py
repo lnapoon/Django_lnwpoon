@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib import admin
+from django.urls import reverse
 
 
 # Create your models here.
@@ -19,7 +20,7 @@ class Major(models.Model):
         return self.mj_name
 
     def get_absolute_url(self):
-        return reversed("Major_detall", kwargs={"pk": self.pk})
+        return reverse("major_detail", kwargs={"pk": self.pk})
 
 
 class Student(models.Model):
@@ -33,7 +34,7 @@ class Student(models.Model):
         return self.fname + " " + self.lname
 
     def get_absolute_url(self):
-        return reversed("Student_detall", kwargs={"pk": self.pk})
+        return reverse("student_detail", kwargs={"pk": self.pk})
 
 
 class StudentAdmin(admin.ModelAdmin):
