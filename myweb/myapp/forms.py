@@ -16,25 +16,38 @@ class StudentForm(forms.ModelForm):
         widgets = {
             "st_id": forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control form-control-lg",
                     "placeholder": "กรอกรหัสนักศึกษา (เช่น 6500000001)",
+                    "aria-label": "รหัสนักศึกษา",
                     "required": True,
                 }
             ),
-            "prefix_name": forms.Select(attrs={"class": "form-select"}),
+            "prefix_name": forms.Select(
+                attrs={
+                    "class": "form-select form-select-lg",
+                    "aria-label": "คำนำหน้าชื่อ",
+                }
+            ),
             "fname": forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control form-control-lg",
                     "placeholder": "กรอกชื่อ",
+                    "aria-label": "ชื่อ",
                     "required": True,
                 }
             ),
             "lname": forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control form-control-lg",
                     "placeholder": "กรอกนามสกุล",
+                    "aria-label": "นามสกุล",
                     "required": True,
                 }
             ),
-            "major": forms.Select(attrs={"class": "form-select"}),
+            "major": forms.Select(
+                attrs={
+                    "class": "form-select form-select-lg",
+                    "aria-label": "สาขาวิชา",
+                }
+            ),
         }

@@ -54,9 +54,9 @@
             <tr>
               <td class="text-center fw-semibold text-muted">{{ forloop.counter }}</td>
               <td>
-                <a href="{% url 'student_detail' pk=student.pk %}" class="fw-bold text-decoration-none text-primary fs-6 d-inline-flex align-items-center">
-                  <span class="badge bg-light text-primary border rounded-pill px-2 py-1 me-1 font-monospace">
-                    #{{ student.st_id }}
+                <a href="{% url 'student_detail' pk=student.pk %}" class="fw-bold text-decoration-none d-inline-flex align-items-center" title="คลิกเพื่อดูข้อมูลและบัตรนักศึกษา">
+                  <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 font-monospace">
+                    <i class="fa-solid fa-id-badge me-1"></i> {{ student.st_id }}
                   </span>
                 </a>
               </td>
