@@ -66,6 +66,7 @@
       </form>
       <!-- Navbar-->
       <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        {% if user.is_authenticated %}
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle text-light d-flex align-items-center"
@@ -75,20 +76,31 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <div class="rounded-circle bg-primary bg-gradient d-inline-flex align-items-center justify-content-center me-1" style="width: 32px; height: 32px;">
+            <div class="rounded-circle bg-primary bg-gradient d-inline-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
               <i class="fas fa-user-shield text-white fs-6"></i>
             </div>
+            <span class="d-none d-lg-inline small fw-semibold text-light">{{ user.username }}</span>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2"
             aria-labelledby="navbarDropdown"
           >
-            <li><a class="dropdown-item py-2" href="#!"><i class="fas fa-cog me-2 text-muted"></i>การตั้งค่า</a></li>
-            <li><a class="dropdown-item py-2" href="#!"><i class="fas fa-history me-2 text-muted"></i>ประวัติการใช้งาน</a></li>
+            <li class="px-3 py-2 border-bottom">
+              <div class="small text-muted">เข้าสู่ระบบในชื่อ:</div>
+              <div class="fw-bold text-dark">{{ user.username }}</div>
+            </li>
+            <li><a class="dropdown-item py-2" href="/admin/" target="_blank"><i class="fas fa-tools me-2 text-primary"></i>Django Admin</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item py-2 text-danger" href="#!"><i class="fas fa-sign-out-alt me-2"></i>ออกจากระบบ</a></li>
+            <li><a class="dropdown-item py-2 text-danger" href="/admin/logout/"><i class="fas fa-sign-out-alt me-2"></i>ออกจากระบบ</a></li>
           </ul>
         </li>
+        {% else %}
+        <li class="nav-item">
+          <a href="/admin/login/?next={{ request.path }}" class="btn btn-outline-light btn-sm rounded-pill px-3">
+            <i class="fa-solid fa-right-to-bracket me-1"></i> เข้าสู่ระบบแอดมิน
+          </a>
+        </li>
+        {% endif %}
       </ul>
     </nav>
     <div id="layoutSidenav">
@@ -103,12 +115,14 @@
                 </span>
                 รายชื่อนักศึกษา
               </a>
+              {% if user.is_authenticated and user.is_staff %}
               <a class="nav-link" href="{% url 'student_create' %}">
                 <span class="sidebar-icon-box icon-success">
                   <i class="fa-solid fa-user-plus"></i>
                 </span>
                 เพิ่มนักศึกษาใหม่
               </a>
+              {% endif %}
 
               <div class="sb-sidenav-menu-heading">ระบบรายวิชา</div>
               <a class="nav-link" href="{% url 'subject_list' %}">
@@ -117,12 +131,14 @@
                 </span>
                 รายวิชาทั้งหมด
               </a>
+              {% if user.is_authenticated and user.is_staff %}
               <a class="nav-link" href="{% url 'subject_create' %}">
                 <span class="sidebar-icon-box icon-warning">
                   <i class="fa-solid fa-plus"></i>
                 </span>
                 เพิ่มรายวิชาใหม่
               </a>
+              {% endif %}
 
               <div class="sb-sidenav-menu-heading">เมนูอื่นๆ</div>
               <a class="nav-link" href="{% url 'about' %}">
@@ -141,11 +157,19 @@
           </div>
           <div class="sb-sidenav-footer">
             <div class="d-flex align-items-center">
-              <div class="rounded-circle bg-success me-2" style="width: 8px; height: 8px; box-shadow: 0 0 8px #10b981;"></div>
-              <div>
-                <div class="small text-muted">สถานะระบบ:</div>
-                <span class="text-light fw-medium">Student Admin Active</span>
-              </div>
+              {% if user.is_authenticated %}
+                <div class="rounded-circle bg-success me-2" style="width: 8px; height: 8px; box-shadow: 0 0 8px #10b981;"></div>
+                <div>
+                  <div class="small text-muted">สถานะ:</div>
+                  <span class="text-light fw-medium">{{ user.username }} (Admin)</span>
+                </div>
+              {% else %}
+                <div class="rounded-circle bg-secondary me-2" style="width: 8px; height: 8px;"></div>
+                <div>
+                  <div class="small text-muted">สถานะ:</div>
+                  <span class="text-light-50 fw-normal">ผู้เยี่ยมชม (Guest)</span>
+                </div>
+              {% endif %}
             </div>
           </div>
         </nav>

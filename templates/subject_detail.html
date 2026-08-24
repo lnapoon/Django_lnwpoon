@@ -96,6 +96,7 @@
         </div>
 
         <!-- Action Footer -->
+        {% if user.is_authenticated and user.is_staff %}
         <div class="card-footer bg-light p-3 px-4 d-flex justify-content-end align-items-center border-top">
           <div class="d-flex gap-2">
             <a href="{% url 'subject_edit' pk=subject.pk %}" class="btn btn-glow-warning rounded-pill px-4">
@@ -106,6 +107,7 @@
             </a>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>

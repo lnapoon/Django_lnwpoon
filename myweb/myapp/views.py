@@ -1,7 +1,13 @@
+from django.contrib.auth.decorators import login_required
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth.decorators import user_passes_test
 from .models import Student, Subject, Category
 from .forms import StudentForm, SubjectForm
+
+
+def is_admin_user(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
 
 
 # Create your views here.
@@ -34,6 +40,7 @@ def student_detail(request, pk):
     return render(request, "student_detail.html", context)
 
 
+@user_passes_test(is_admin_user, login_url="/admin/login/")
 def student_create(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -51,6 +58,7 @@ def student_create(request):
     return render(request, "student_form.html", context)
 
 
+@user_passes_test(is_admin_user, login_url="/admin/login/")
 def student_edit(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == "POST":
@@ -70,6 +78,7 @@ def student_edit(request, pk):
     return render(request, "student_form.html", context)
 
 
+@user_passes_test(is_admin_user, login_url="/admin/login/")
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == "POST":
@@ -89,7 +98,9 @@ def student_delete(request, pk):
 def subject_list(request):
     category_id = request.GET.get("category")
     if category_id:
-        subjects = Subject.objects.filter(category_id=category_id).select_related("category")
+        subjects = Subject.objects.filter(category_id=category_id).select_related(
+            "category"
+        )
     else:
         subjects = Subject.objects.all().select_related("category")
 
@@ -99,7 +110,9 @@ def subject_list(request):
         "title": "รายวิชาเรียนทั้งหมด",
         "subjects": subjects,
         "categories": categories,
-        "selected_category": int(category_id) if category_id and category_id.isdigit() else None,
+        "selected_category": (
+            int(category_id) if category_id and category_id.isdigit() else None
+        ),
         "date": datetime.date.today(),
     }
     return render(request, "subject_list.html", context)
@@ -114,6 +127,7 @@ def subject_detail(request, pk):
     return render(request, "subject_detail.html", context)
 
 
+@user_passes_test(is_admin_user, login_url="/admin/login/")
 def subject_create(request):
     if request.method == "POST":
         form = SubjectForm(request.POST)
@@ -131,6 +145,7 @@ def subject_create(request):
     return render(request, "subject_form.html", context)
 
 
+@user_passes_test(is_admin_user, login_url="/admin/login/")
 def subject_edit(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     if request.method == "POST":
@@ -150,6 +165,7 @@ def subject_edit(request, pk):
     return render(request, "subject_form.html", context)
 
 
+@user_passes_test(is_admin_user, login_url="/admin/login/")
 def subject_delete(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     if request.method == "POST":

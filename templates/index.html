@@ -15,9 +15,11 @@
         </div>
       </div>
     </div>
+    {% if user.is_authenticated and user.is_staff %}
     <a href="{% url 'student_create' %}" class="btn btn-glow-primary btn-lg rounded-pill px-4">
       <i class="fa-solid fa-user-plus me-2"></i> เพิ่มนักศึกษาใหม่
     </a>
+    {% endif %}
   </div>
 
   <!-- Student Table Card -->
@@ -77,12 +79,14 @@
                   <a href="{% url 'student_detail' pk=student.pk %}" class="action-btn btn-view" title="ดูรายละเอียด">
                     <i class="fa-solid fa-eye"></i>
                   </a>
+                  {% if user.is_authenticated and user.is_staff %}
                   <a href="{% url 'student_edit' pk=student.pk %}" class="action-btn btn-edit" title="แก้ไขข้อมูล">
                     <i class="fa-solid fa-pen"></i>
                   </a>
                   <a href="{% url 'student_delete' pk=student.pk %}" class="action-btn btn-delete" title="ลบข้อมูล">
                     <i class="fa-solid fa-trash-can"></i>
                   </a>
+                  {% endif %}
                 </div>
               </td>
             </tr>
@@ -93,10 +97,12 @@
                   <i class="fa-solid fa-folder-open fa-2x text-muted opacity-50"></i>
                 </div>
                 <h5 class="fw-bold text-dark">ยังไม่มีข้อมูลนักศึกษาในระบบ</h5>
+                {% if user.is_authenticated and user.is_staff %}
                 <p class="small text-muted mb-3">กดปุ่มด้านล่างเพื่อเริ่มลงทะเบียนนักศึกษาคนแรก</p>
                 <a href="{% url 'student_create' %}" class="btn btn-glow-primary btn-sm rounded-pill px-4">
                   <i class="fa-solid fa-plus me-1"></i> เพิ่มนักศึกษาใหม่
                 </a>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}

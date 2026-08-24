@@ -1,10 +1,16 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth.models import User
 from .models import Student, Major, Subject, Category
 
 
 class StudentCRUDTest(TestCase):
     def setUp(self):
+        self.admin_user = User.objects.create_superuser(
+            username="admin", password="password123", email="admin@example.com"
+        )
+        self.client.force_login(self.admin_user)
+
         self.major = Major.objects.create(mj_name="วิทยากรรมคอมพิวเตอร์")
         self.student = Student.objects.create(
             st_id="65010001",
@@ -65,6 +71,11 @@ class StudentCRUDTest(TestCase):
 
 class SubjectCRUDTest(TestCase):
     def setUp(self):
+        self.admin_user = User.objects.create_superuser(
+            username="admin", password="password123", email="admin@example.com"
+        )
+        self.client.force_login(self.admin_user)
+
         self.category = Category.objects.create(name="วิชาเฉพาะสาขา")
         self.subject = Subject.objects.create(
             code="CS101",
