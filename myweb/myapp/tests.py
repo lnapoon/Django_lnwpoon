@@ -4,6 +4,44 @@ from django.contrib.auth.models import User
 from .models import Student, Major, Subject, Category
 
 
+class AuthSystemTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="normaluser", password="Password123!", email="user@example.com"
+        )
+        self.admin_user = User.objects.create_superuser(
+            username="adminuser", password="Password123!", email="admin@example.com"
+        )
+
+    def test_login_page_renders(self):
+        response = self.client.get(reverse("login"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "เข้าสู่ระบบ")
+
+    def test_register_page_renders(self):
+        response = self.client.get(reverse("register"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "สมัครสมาชิก")
+
+    def test_login_success(self):
+        response = self.client.post(
+            reverse("login"),
+            {"username": "normaluser", "password": "Password123!"},
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_logout(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("logout"))
+        self.assertEqual(response.status_code, 302)
+
+    def test_normal_user_cannot_access_create_student(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("student_create"))
+        # Should redirect to login because normal user is not staff
+        self.assertEqual(response.status_code, 302)
+
+
 class StudentCRUDTest(TestCase):
     def setUp(self):
         self.admin_user = User.objects.create_superuser(

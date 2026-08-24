@@ -6,6 +6,11 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
 
+    # Auth routes
+    path("login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
+    path("register/", views.register_view, name="register"),
+
     # Student CRUD
     path("student/create/", views.student_create, name="student_create"),
     path("student/<int:pk>/", views.student_detail, name="student_detail"),

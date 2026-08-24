@@ -8,22 +8,28 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <meta name="description" content="ระบบจัดการข้อมูลนักศึกษา Student Management System" />
+    <meta
+      name="description"
+      content="ระบบจัดการข้อมูลนักศึกษา Student Management System"
+    />
     <meta name="author" content="INWPOON" />
     <title>Student Management - INWPOON</title>
-    
+
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <link
       href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
       rel="stylesheet"
     />
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
     <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
-    
+
     <!-- FontAwesome 6 -->
     <link
       rel="stylesheet"
@@ -35,7 +41,10 @@
   <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark">
       <!-- Navbar Brand-->
-      <a class="navbar-brand ps-3 d-flex align-items-center" href="{% url 'home' %}">
+      <a
+        class="navbar-brand ps-3 d-flex align-items-center"
+        href="{% url 'home' %}"
+      >
         <i class="fa-solid fa-crown text-warning me-2 fs-5"></i>
         <span class="brand-gradient">INWPOON</span>
       </a>
@@ -57,15 +66,22 @@
             type="text"
             placeholder="ค้นหาข้อมูล..."
             aria-label="Search"
-            style="background: rgba(255,255,255,0.08) !important; color: #fff;"
+            style="
+              background: rgba(255, 255, 255, 0.08) !important;
+              color: #fff;
+            "
           />
-          <button class="btn btn-primary rounded-end-pill px-3" id="btnNavbarSearch" type="button">
+          <button
+            class="btn btn-primary rounded-end-pill px-3"
+            id="btnNavbarSearch"
+            type="button"
+          >
             <i class="fas fa-search"></i>
           </button>
         </div>
       </form>
       <!-- Navbar-->
-      <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4 d-flex align-items-center gap-2">
         {% if user.is_authenticated %}
         <li class="nav-item dropdown">
           <a
@@ -76,10 +92,15 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <div class="rounded-circle bg-primary bg-gradient d-inline-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
-              <i class="fas fa-user-shield text-white fs-6"></i>
+            <div
+              class="rounded-circle {% if user.is_staff %}bg-primary{% else %}bg-success{% endif %} bg-gradient d-inline-flex align-items-center justify-content-center me-2"
+              style="width: 32px; height: 32px"
+            >
+              <i class="fas {% if user.is_staff %}fa-user-shield{% else %}fa-user{% endif %} text-white fs-6"></i>
             </div>
-            <span class="d-none d-lg-inline small fw-semibold text-light">{{ user.username }}</span>
+            <span class="d-none d-lg-inline small fw-semibold text-light"
+              >{{ user.username }} {% if user.is_staff %}<span class="badge bg-primary ms-1">Admin</span>{% endif %}</span
+            >
           </a>
           <ul
             class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2"
@@ -88,16 +109,40 @@
             <li class="px-3 py-2 border-bottom">
               <div class="small text-muted">เข้าสู่ระบบในชื่อ:</div>
               <div class="fw-bold text-dark">{{ user.username }}</div>
+              <span class="badge {% if user.is_staff %}bg-primary{% else %}bg-secondary{% endif %} rounded-pill mt-1">
+                {% if user.is_staff %}ผู้ดูแลระบบ (Admin){% else %}ผู้ใช้งานทั่วไป (Member){% endif %}
+              </span>
             </li>
-            <li><a class="dropdown-item py-2" href="/admin/" target="_blank"><i class="fas fa-tools me-2 text-primary"></i>Django Admin</a></li>
+            {% if user.is_staff %}
+            <li>
+              <a class="dropdown-item py-2" href="/admin/" target="_blank"
+                ><i class="fas fa-tools me-2 text-primary"></i>Django Admin</a
+              >
+            </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item py-2 text-danger" href="/admin/logout/"><i class="fas fa-sign-out-alt me-2"></i>ออกจากระบบ</a></li>
+            {% endif %}
+            <li>
+              <a class="dropdown-item py-2 text-danger" href="{% url 'logout' %}"
+                ><i class="fas fa-sign-out-alt me-2"></i>ออกจากระบบ (Logout)</a
+              >
+            </li>
           </ul>
         </li>
         {% else %}
         <li class="nav-item">
-          <a href="/admin/login/?next={{ request.path }}" class="btn btn-outline-light btn-sm rounded-pill px-3">
-            <i class="fa-solid fa-right-to-bracket me-1"></i> เข้าสู่ระบบแอดมิน
+          <a
+            href="{% url 'login' %}"
+            class="btn btn-outline-light btn-sm rounded-pill px-3"
+          >
+            <i class="fa-solid fa-right-to-bracket me-1"></i> เข้าสู่ระบบ
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="{% url 'register' %}"
+            class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
+          >
+            <i class="fa-solid fa-user-plus me-1"></i> สมัครสมาชิก
           </a>
         </li>
         {% endif %}
@@ -153,22 +198,53 @@
                 </span>
                 ติดต่อเรา
               </a>
+
+              <div class="sb-sidenav-menu-heading">บัญชีผู้ใช้</div>
+              {% if not user.is_authenticated %}
+              <a class="nav-link" href="{% url 'login' %}">
+                <span class="sidebar-icon-box icon-primary">
+                  <i class="fa-solid fa-right-to-bracket"></i>
+                </span>
+                เข้าสู่ระบบ (Login)
+              </a>
+              <a class="nav-link" href="{% url 'register' %}">
+                <span class="sidebar-icon-box icon-success">
+                  <i class="fa-solid fa-user-plus"></i>
+                </span>
+                สมัครสมาชิก (Sign up)
+              </a>
+              {% else %}
+              <a class="nav-link text-danger" href="{% url 'logout' %}">
+                <span class="sidebar-icon-box icon-danger">
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </span>
+                ออกจากระบบ (Logout)
+              </a>
+              {% endif %}
             </div>
           </div>
           <div class="sb-sidenav-footer">
             <div class="d-flex align-items-center">
               {% if user.is_authenticated %}
-                <div class="rounded-circle bg-success me-2" style="width: 8px; height: 8px; box-shadow: 0 0 8px #10b981;"></div>
-                <div>
-                  <div class="small text-muted">สถานะ:</div>
-                  <span class="text-light fw-medium">{{ user.username }} (Admin)</span>
-                </div>
+              <div
+                class="rounded-circle {% if user.is_staff %}bg-success{% else %}bg-info{% endif %} me-2"
+                style="width: 8px; height: 8px; box-shadow: 0 0 8px {% if user.is_staff %}#10b981{% else %}#06b6d4{% endif %}"
+              ></div>
+              <div>
+                <div class="small text-muted">สถานะ:</div>
+                <span class="text-light fw-medium"
+                  >{{ user.username }} ({% if user.is_staff %}Admin{% else %}Member{% endif %})</span
+                >
+              </div>
               {% else %}
-                <div class="rounded-circle bg-secondary me-2" style="width: 8px; height: 8px;"></div>
-                <div>
-                  <div class="small text-muted">สถานะ:</div>
-                  <span class="text-light-50 fw-normal">ผู้เยี่ยมชม (Guest)</span>
-                </div>
+              <div
+                class="rounded-circle bg-secondary me-2"
+                style="width: 8px; height: 8px"
+              ></div>
+              <div>
+                <div class="small text-muted">สถานะ:</div>
+                <span class="text-light-50 fw-normal">ผู้เยี่ยมชม (Guest)</span>
+              </div>
               {% endif %}
             </div>
           </div>
@@ -185,10 +261,17 @@
             <div
               class="d-flex align-items-center justify-content-between small text-muted"
             >
-              <div>Copyright &copy; <strong>INWPOON</strong> 2026. All rights reserved.</div>
               <div>
-                <a href="#" class="text-decoration-none text-muted me-3">Privacy Policy</a>
-                <a href="#" class="text-decoration-none text-muted">Terms of Service</a>
+                Copyright &copy; <strong>INWPOON</strong> 2026. All rights
+                reserved.
+              </div>
+              <div>
+                <a href="#" class="text-decoration-none text-muted me-3"
+                  >Privacy Policy</a
+                >
+                <a href="#" class="text-decoration-none text-muted"
+                  >Terms of Service</a
+                >
               </div>
             </div>
           </div>

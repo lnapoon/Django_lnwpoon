@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import Student, Subject, Category
 
 
@@ -87,3 +89,70 @@ class SubjectForm(forms.ModelForm):
                 }
             ),
         }
+
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label="ชื่อผู้ใช้ (Username)",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "placeholder": "กรอกชื่อผู้ใช้",
+                "aria-label": "ชื่อผู้ใช้",
+                "autofocus": True,
+            }
+        ),
+    )
+    password = forms.CharField(
+        label="รหัสผ่าน (Password)",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "placeholder": "กรอกรหัสผ่าน",
+                "aria-label": "รหัสผ่าน",
+            }
+        ),
+    )
+
+
+class UserRegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+        labels = {
+            "username": "ชื่อผู้ใช้ (Username)",
+            "email": "อีเมล (Email)",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs.update(
+            {
+                "class": "form-control form-control-lg",
+                "placeholder": "ตั้งชื่อผู้ใช้สำหรับเข้าสู่ระบบ",
+                "aria-label": "ชื่อผู้ใช้",
+            }
+        )
+        self.fields["email"].widget.attrs.update(
+            {
+                "class": "form-control form-control-lg",
+                "placeholder": "กรอกอีเมลของคุณ (เช่น user@example.com)",
+                "aria-label": "อีเมล",
+            }
+        )
+        if "password1" in self.fields:
+            self.fields["password1"].widget.attrs.update(
+                {
+                    "class": "form-control form-control-lg",
+                    "placeholder": "ตั้งรหัสผ่าน",
+                    "aria-label": "รหัสผ่าน",
+                }
+            )
+        if "password2" in self.fields:
+            self.fields["password2"].widget.attrs.update(
+                {
+                    "class": "form-control form-control-lg",
+                    "placeholder": "ยืนยันรหัสผ่านอีกครั้ง",
+                    "aria-label": "ยืนยันรหัสผ่าน",
+                }
+            )
