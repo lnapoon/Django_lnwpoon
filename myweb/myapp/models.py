@@ -11,6 +11,12 @@ PREFIX_NAME = (
     ("นางสาว", "นางสาว"),
 )
 
+SEMESTER = (
+    ("1/2569", "1/2569"),
+    ("2/2569", "2/2569"),
+    ("3/2569", "3/2569"),
+)
+
 
 class Major(models.Model):
     mj_name = models.CharField(max_length=100, blank=False)
@@ -57,8 +63,20 @@ class Subject(models.Model):
         ordering = ["sub_code"]
 
     def __str__(self):
-        return f"{self.sub_code} {self.sub_name}"
+        return self.sub_code + " " + self.sub_name
 
     def get_absolute_url(self):
         return reverse("subject_detail", kwargs={"pk": self.pk})
 
+
+class Enrolls(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    semester = models.CharField(max_length=10, choices=SEMESTER, default="1/2569")
+
+    class Meta:
+        verbose_name = "การลงทะเบียน"
+        verbose_name_plural = "การลงทะเบียน"
+
+    def __str__(self):
+        return f"{self.student} - {self.subject}"

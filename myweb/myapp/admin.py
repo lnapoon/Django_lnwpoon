@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student, Major, Category, Subject
+from .models import Student, Major, Category, Subject, Enrolls
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -19,7 +19,20 @@ class SubjectAdmin(admin.ModelAdmin):
     search_fields = ["sub_code", "sub_name"]
 
 
+class EnrollsAdmin(admin.ModelAdmin):
+    list_display = ["student", "subject"]
+    list_filter = ["subject"]
+    search_fields = [
+        "student__fname",
+        "student__lname",
+        "student__st_id",
+        "subject__sub_code",
+        "subject__sub_name",
+    ]
+
+
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Major, MajorAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Subject, SubjectAdmin)
+admin.site.register(Enrolls, EnrollsAdmin)
