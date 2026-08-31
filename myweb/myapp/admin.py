@@ -20,8 +20,8 @@ class SubjectAdmin(admin.ModelAdmin):
 
 
 class EnrollsAdmin(admin.ModelAdmin):
-    list_display = ["student", "subject"]
-    list_filter = ["subject"]
+    list_display = ["student", "subject", "semester"]
+    list_filter = ["subject", "semester"]
     search_fields = [
         "student__fname",
         "student__lname",
