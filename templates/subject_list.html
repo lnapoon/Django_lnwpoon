@@ -22,19 +22,6 @@
     {% endif %}
   </div>
 
-  <!-- Category Filter Pills -->
-  <div class="mb-4 d-flex flex-wrap gap-2 align-items-center">
-    <span class="text-muted small fw-bold me-2"><i class="fa-solid fa-filter text-primary me-1"></i> หมวดหมู่:</span>
-    <a href="{% url 'subject_list' %}" class="btn btn-sm rounded-pill px-3 {% if not selected_category %}btn-primary shadow-sm{% else %}btn-light border text-secondary{% endif %}">
-      ทั้งหมด
-    </a>
-    {% for cat in categories %}
-      <a href="{% url 'subject_list' %}?category={{ cat.id }}" class="btn btn-sm rounded-pill px-3 {% if selected_category == cat.id %}btn-primary shadow-sm{% else %}btn-light border text-secondary{% endif %}">
-        {{ cat.name }}
-      </a>
-    {% endfor %}
-  </div>
-
   <!-- Subject Table Card -->
   <div class="card glow-card border-0">
     <div class="card-header bg-white py-3 px-4 border-0 d-flex align-items-center justify-content-between">
@@ -56,9 +43,8 @@
           <thead class="bg-light text-secondary">
             <tr>
               <th scope="col" class="text-center py-3" style="width: 70px;">ลำดับ</th>
-              <th scope="col" class="py-3" style="width: 150px;">รหัสวิชา</th>
+              <th scope="col" class="py-3" style="width: 180px;">รหัสวิชา</th>
               <th scope="col" class="py-3">ชื่อรายวิชา</th>
-              <th scope="col" class="py-3" style="width: 220px;">หมวดหมู่วิชา</th>
               <th scope="col" class="text-center py-3" style="width: 180px;">จัดการ</th>
             </tr>
           </thead>
@@ -69,30 +55,11 @@
               <td>
                 <a href="{% url 'subject_detail' pk=subject.pk %}" class="fw-bold text-decoration-none d-inline-flex align-items-center" title="คลิกเพื่อดูรายละเอียด">
                   <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 font-monospace">
-                    <i class="fa-solid fa-bookmark me-1"></i> {{ subject.code }}
+                    <i class="fa-solid fa-bookmark me-1"></i> {{ subject.sub_code }}
                   </span>
                 </a>
               </td>
-              <td class="fw-bold text-dark fs-6">{{ subject.title }}</td>
-              <td>
-                {% if "เฉพาะสาขา" in subject.category.name %}
-                  <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold">
-                    <i class="fa-solid fa-laptop-code me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% elif "เลือก" in subject.category.name %}
-                  <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold">
-                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% elif "ทั่วไป" in subject.category.name %}
-                  <span class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill fw-semibold">
-                    <i class="fa-solid fa-globe me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% else %}
-                  <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill fw-semibold">
-                    <i class="fa-solid fa-briefcase me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% endif %}
-              </td>
+              <td class="fw-bold text-dark fs-6">{{ subject.sub_name }}</td>
               <td class="text-center">
                 <div class="d-inline-flex gap-2">
                   <a href="{% url 'subject_detail' pk=subject.pk %}" class="action-btn btn-view" title="ดูรายละเอียด">
@@ -111,7 +78,7 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="5" class="text-center py-5 text-muted bg-light bg-opacity-50">
+              <td colspan="4" class="text-center py-5 text-muted bg-light bg-opacity-50">
                 <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-white shadow-sm p-4 mb-3" style="width: 80px; height: 80px;">
                   <i class="fa-solid fa-book-open fa-2x text-muted opacity-50"></i>
                 </div>

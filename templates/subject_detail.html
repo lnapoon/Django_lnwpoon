@@ -39,7 +39,7 @@
             <h5 class="m-0 fw-bold">ข้อมูลรายวิชา</h5>
           </div>
           <span class="badge bg-white text-primary rounded-pill px-3 py-2 fs-6 fw-bold shadow-sm font-monospace">
-            {{ subject.code }}
+            {{ subject.sub_code }}
           </span>
         </div>
 
@@ -52,45 +52,17 @@
             </div>
             <div>
               <div class="text-muted small fw-bold">รหัสวิชา</div>
-              <div class="fs-5 fw-bold text-primary font-monospace">{{ subject.code }}</div>
-            </div>
-          </div>
-
-          <div class="p-3 bg-light rounded-4 mb-3 border d-flex align-items-center">
-            <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
-              <i class="fa-solid fa-book-open"></i>
-            </div>
-            <div>
-              <div class="text-muted small fw-bold">ชื่อรายวิชา</div>
-              <div class="fs-5 fw-bold text-dark">{{ subject.title }}</div>
+              <div class="fs-5 fw-bold text-primary font-monospace">{{ subject.sub_code }}</div>
             </div>
           </div>
 
           <div class="p-3 bg-light rounded-4 mb-2 border d-flex align-items-center">
             <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
-              <i class="fa-solid fa-layer-group"></i>
+              <i class="fa-solid fa-book-open"></i>
             </div>
             <div>
-              <div class="text-muted small fw-bold">หมวดหมู่วิชา</div>
-              <div class="mt-1">
-                {% if "เฉพาะสาขา" in subject.category.name %}
-                  <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fs-6 fw-semibold">
-                    <i class="fa-solid fa-laptop-code me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% elif "เลือก" in subject.category.name %}
-                  <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fs-6 fw-semibold">
-                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% elif "ทั่วไป" in subject.category.name %}
-                  <span class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill fs-6 fw-semibold">
-                    <i class="fa-solid fa-globe me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% else %}
-                  <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill fs-6 fw-semibold">
-                    <i class="fa-solid fa-briefcase me-1"></i> {{ subject.category.name }}
-                  </span>
-                {% endif %}
-              </div>
+              <div class="text-muted small fw-bold">ชื่อรายวิชา</div>
+              <div class="fs-5 fw-bold text-dark">{{ subject.sub_name }}</div>
             </div>
           </div>
         </div>
