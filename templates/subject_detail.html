@@ -8,19 +8,20 @@
       <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center">
           <div class="d-inline-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-25 text-primary me-3" style="width: 44px; height: 44px; box-shadow: 0 4px 14px var(--primary-glow);">
-            <i class="fa-solid fa-user-graduate fs-5"></i>
+            <i class="fa-solid fa-book-bookmark fs-5"></i>
           </div>
           <div>
-            <h2 class="fw-bold m-0 text-dark">ข้อมูลนักศึกษา</h2>
+            <h2 class="fw-bold m-0 text-dark">ข้อมูลรายวิชา</h2>
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb mb-0 small">
                 <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">หน้าแรก</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'subject_list' %}" class="text-decoration-none text-muted">รายวิชา</a></li>
                 <li class="breadcrumb-item active fw-semibold text-primary">รายละเอียด</li>
               </ol>
             </nav>
           </div>
         </div>
-        <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-3 shadow-sm">
+        <a href="{% url 'subject_list' %}" class="btn btn-outline-secondary rounded-pill px-3 shadow-sm">
           <i class="fa-solid fa-arrow-left me-1"></i> ย้อนกลับ
         </a>
       </div>
@@ -34,11 +35,11 @@
         <!-- Clean Header -->
         <div class="card-header card-header-primary py-3 px-4 border-0 d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center">
-            <i class="fa-solid fa-id-card me-2 fs-5"></i>
-            <h5 class="m-0 fw-bold">ข้อมูลนักศึกษา</h5>
+            <i class="fa-solid fa-bookmark me-2 fs-5"></i>
+            <h5 class="m-0 fw-bold">ข้อมูลรายวิชา</h5>
           </div>
           <span class="badge bg-white text-primary rounded-pill px-3 py-2 fs-6 fw-bold shadow-sm font-monospace">
-            {{ student.st_id }}
+            {{ subject.sub_code }}
           </span>
         </div>
 
@@ -47,39 +48,21 @@
           <!-- Information Rows -->
           <div class="p-3 bg-light rounded-4 mb-3 border d-flex align-items-center">
             <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
-              <i class="fa-solid fa-hashtag"></i>
+              <i class="fa-solid fa-barcode"></i>
             </div>
             <div>
-              <div class="text-muted small fw-bold">รหัสนักศึกษา</div>
-              <div class="fs-5 fw-bold text-primary font-monospace">{{ student.st_id }}</div>
-            </div>
-          </div>
-
-          <div class="p-3 bg-light rounded-4 mb-3 border d-flex align-items-center">
-            <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
-              <i class="fa-solid fa-user"></i>
-            </div>
-            <div>
-              <div class="text-muted small fw-bold">ชื่อ - นามสกุล</div>
-              <div class="fs-5 fw-bold text-dark">{{ student.prefix_name }}{{ student.fname }} {{ student.lname }}</div>
+              <div class="text-muted small fw-bold">รหัสวิชา</div>
+              <div class="fs-5 fw-bold text-primary font-monospace">{{ subject.sub_code }}</div>
             </div>
           </div>
 
           <div class="p-3 bg-light rounded-4 mb-2 border d-flex align-items-center">
             <div class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary" style="width: 42px; height: 42px; min-width: 42px;">
-              <i class="fa-solid fa-graduation-cap"></i>
+              <i class="fa-solid fa-book-open"></i>
             </div>
             <div>
-              <div class="text-muted small fw-bold">สาขาวิชา</div>
-              <div class="mt-1">
-                {% if student.major %}
-                  <span class="badge bg-success bg-gradient px-3 py-2 rounded-pill fs-6 fw-semibold">
-                    <i class="fa-solid fa-book-open me-1"></i> {{ student.major.mj_name }}
-                  </span>
-                {% else %}
-                  <span class="text-muted fst-italic">ไม่ได้ระบุ</span>
-                {% endif %}
-              </div>
+              <div class="text-muted small fw-bold">ชื่อรายวิชา</div>
+              <div class="fs-5 fw-bold text-dark">{{ subject.sub_name }}</div>
             </div>
           </div>
         </div>
@@ -88,10 +71,10 @@
         {% if user.is_authenticated and user.is_staff %}
         <div class="card-footer bg-light p-3 px-4 d-flex justify-content-end align-items-center border-top">
           <div class="d-flex gap-2">
-            <a href="{% url 'student_edit' pk=student.pk %}" class="btn btn-glow-warning rounded-pill px-4">
+            <a href="{% url 'subject_edit' pk=subject.pk %}" class="btn btn-glow-warning rounded-pill px-4">
               <i class="fa-solid fa-pen-to-square me-1"></i> แก้ไข
             </a>
-            <a href="{% url 'student_delete' pk=student.pk %}" class="btn btn-glow-danger rounded-pill px-4">
+            <a href="{% url 'subject_delete' pk=subject.pk %}" class="btn btn-glow-danger rounded-pill px-4">
               <i class="fa-solid fa-trash-can me-1"></i> ลบ
             </a>
           </div>

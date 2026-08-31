@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib import admin
 from django.urls import reverse
 
 
@@ -10,6 +9,12 @@ PREFIX_NAME = (
     ("นาย", "นาย"),
     ("นาง", "นาง"),
     ("นางสาว", "นางสาว"),
+)
+
+SEMESTER = (
+    ("1/2569", "1/2569"),
+    ("2/2569", "2/2569"),
+    ("3/2569", "3/2569"),
 )
 
 
@@ -37,13 +42,41 @@ class Student(models.Model):
         return reverse("student_detail", kwargs={"pk": self.pk})
 
 
-class StudentAdmin(admin.ModelAdmin):
-    list_display = ["st_id", "prefix_name", "fname", "lname", "major"]
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name="หมวดหมู่วิชา")
+
+    class Meta:
+        verbose_name = "หมวดหมู่วิชา"
+        verbose_name_plural = "หมวดหมู่วิชา"
+
+    def __str__(self):
+        return self.name
 
 
-class MajorAdmin(admin.ModelAdmin):
-    list_display = ["mj_name"]
+class Subject(models.Model):
+    sub_code = models.CharField(max_length=10, unique=True, verbose_name="รหัสวิชา")
+    sub_name = models.CharField(max_length=100, blank=False, verbose_name="ชื่อวิชา")
+
+    class Meta:
+        verbose_name = "รายวิชา"
+        verbose_name_plural = "รายวิชา"
+        ordering = ["sub_code"]
+
+    def __str__(self):
+        return self.sub_code + " " + self.sub_name
+
+    def get_absolute_url(self):
+        return reverse("subject_detail", kwargs={"pk": self.pk})
 
 
-admin.site.register(Student, StudentAdmin)
-admin.site.register(Major, MajorAdmin)
+class Enrolls(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    semester = models.CharField(max_length=10, choices=SEMESTER, default="1/2569")
+
+    class Meta:
+        verbose_name = "การลงทะเบียน"
+        verbose_name_plural = "การลงทะเบียน"
+
+    def __str__(self):
+        return f"{self.student} - {self.subject}"
