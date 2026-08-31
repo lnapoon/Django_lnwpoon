@@ -114,11 +114,9 @@ class SubjectCRUDTest(TestCase):
         )
         self.client.force_login(self.admin_user)
 
-        self.category = Category.objects.create(name="วิชาเฉพาะสาขา")
         self.subject = Subject.objects.create(
-            code="CS101",
-            title="พื้นฐานวิทยาการคอมพิวเตอร์",
-            category=self.category,
+            sub_code="CS101",
+            sub_name="พื้นฐานวิทยาการคอมพิวเตอร์",
         )
 
     def test_subject_list(self):
@@ -137,26 +135,24 @@ class SubjectCRUDTest(TestCase):
         response = self.client.post(
             reverse("subject_create"),
             {
-                "code": "CS102",
-                "title": "การเขียนโปรแกรมเบื้องต้น (Python)",
-                "category": self.category.pk,
+                "sub_code": "CS102",
+                "sub_name": "การเขียนโปรแกรมเบื้องต้น (Python)",
             },
         )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(Subject.objects.filter(code="CS102").exists())
+        self.assertTrue(Subject.objects.filter(sub_code="CS102").exists())
 
     def test_subject_edit(self):
         response = self.client.post(
             reverse("subject_edit", kwargs={"pk": self.subject.pk}),
             {
-                "code": "CS101",
-                "title": "พื้นฐานวิทยาการคอมพิวเตอร์ (ปรับปรุง)",
-                "category": self.category.pk,
+                "sub_code": "CS101",
+                "sub_name": "พื้นฐานวิทยาการคอมพิวเตอร์ (ปรับปรุง)",
             },
         )
         self.assertEqual(response.status_code, 302)
         self.subject.refresh_from_db()
-        self.assertEqual(self.subject.title, "พื้นฐานวิทยาการคอมพิวเตอร์ (ปรับปรุง)")
+        self.assertEqual(self.subject.sub_name, "พื้นฐานวิทยาการคอมพิวเตอร์ (ปรับปรุง)")
 
     def test_subject_delete(self):
         response = self.client.post(
@@ -164,3 +160,4 @@ class SubjectCRUDTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Subject.objects.filter(pk=self.subject.pk).exists())
+

@@ -145,23 +145,10 @@ def student_delete(request, pk):
 # Subject CRUD Views
 # ==========================================
 def subject_list(request):
-    category_id = request.GET.get("category")
-    if category_id:
-        subjects = Subject.objects.filter(category_id=category_id).select_related(
-            "category"
-        )
-    else:
-        subjects = Subject.objects.all().select_related("category")
-
-    categories = Category.objects.all()
-
+    subjects = Subject.objects.all().order_by("sub_code")
     context = {
         "title": "รายวิชาเรียนทั้งหมด",
         "subjects": subjects,
-        "categories": categories,
-        "selected_category": (
-            int(category_id) if category_id and category_id.isdigit() else None
-        ),
         "date": datetime.date.today(),
     }
     return render(request, "subject_list.html", context)
@@ -170,7 +157,7 @@ def subject_list(request):
 def subject_detail(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     context = {
-        "title": f"ข้อมูลรายวิชา: {subject.code} {subject.title}",
+        "title": f"ข้อมูลรายวิชา: {subject.sub_code} {subject.sub_name}",
         "subject": subject,
     }
     return render(request, "subject_detail.html", context)
@@ -206,7 +193,7 @@ def subject_edit(request, pk):
         form = SubjectForm(instance=subject)
 
     context = {
-        "title": f"แก้ไขข้อมูลรายวิชา: {subject.code} {subject.title}",
+        "title": f"แก้ไขข้อมูลรายวิชา: {subject.sub_code} {subject.sub_name}",
         "form": form,
         "subject": subject,
         "is_edit": True,
@@ -222,7 +209,8 @@ def subject_delete(request, pk):
         return redirect("subject_list")
 
     context = {
-        "title": f"ยืนยันการลบรายวิชา: {subject.code} {subject.title}",
+        "title": f"ยืนยันการลบรายวิชา: {subject.sub_code} {subject.sub_name}",
         "subject": subject,
     }
     return render(request, "subject_confirm_delete.html", context)
+

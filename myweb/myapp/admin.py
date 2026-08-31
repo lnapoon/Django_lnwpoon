@@ -15,9 +15,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ["code", "title", "category"]
-    search_fields = ["code", "title"]
-    list_filter = ["category"]
+    list_display = ["sub_code", "sub_name"]
+    search_fields = ["sub_code", "sub_name"]
 
 
 admin.site.register(Student, StudentAdmin)

@@ -58,14 +58,13 @@ class StudentForm(forms.ModelForm):
 class SubjectForm(forms.ModelForm):
     class Meta:
         model = Subject
-        fields = ["code", "title", "category"]
+        fields = ["sub_code", "sub_name"]
         labels = {
-            "code": "รหัสวิชา",
-            "title": "ชื่อรายวิชา",
-            "category": "หมวดหมู่วิชา",
+            "sub_code": "รหัสวิชา",
+            "sub_name": "ชื่อรายวิชา",
         }
         widgets = {
-            "code": forms.TextInput(
+            "sub_code": forms.TextInput(
                 attrs={
                     "class": "form-control form-control-lg",
                     "placeholder": "กรอกรหัสวิชา (เช่น CS101)",
@@ -73,18 +72,11 @@ class SubjectForm(forms.ModelForm):
                     "required": True,
                 }
             ),
-            "title": forms.TextInput(
+            "sub_name": forms.TextInput(
                 attrs={
                     "class": "form-control form-control-lg",
                     "placeholder": "กรอกชื่อรายวิชา (เช่น พื้นฐานวิทยาการคอมพิวเตอร์)",
                     "aria-label": "ชื่อรายวิชา",
-                    "required": True,
-                }
-            ),
-            "category": forms.Select(
-                attrs={
-                    "class": "form-select form-select-lg",
-                    "aria-label": "หมวดหมู่วิชา",
                     "required": True,
                 }
             ),

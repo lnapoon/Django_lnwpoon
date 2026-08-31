@@ -48,22 +48,16 @@ class Category(models.Model):
 
 
 class Subject(models.Model):
-    code = models.CharField(max_length=10, unique=True, verbose_name="รหัสวิชา")
-    title = models.CharField(max_length=200, blank=False, verbose_name="ชื่อวิชา")
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.CASCADE,
-        related_name="subjects",
-        verbose_name="หมวดหมู่",
-    )
+    sub_code = models.CharField(max_length=10, unique=True, verbose_name="รหัสวิชา")
+    sub_name = models.CharField(max_length=100, blank=False, verbose_name="ชื่อวิชา")
 
     class Meta:
         verbose_name = "รายวิชา"
         verbose_name_plural = "รายวิชา"
-        ordering = ["code"]
+        ordering = ["sub_code"]
 
     def __str__(self):
-        return f"{self.code} {self.title}"
+        return f"{self.sub_code} {self.sub_name}"
 
     def get_absolute_url(self):
         return reverse("subject_detail", kwargs={"pk": self.pk})
